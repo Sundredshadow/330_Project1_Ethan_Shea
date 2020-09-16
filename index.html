@@ -1,2 +1,45 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+    <title>Template</title>
+    <link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+    <script src="src/edsLIB.js"></script>
+    <script src="src/index.js"></script>
+</head>
+<body>
+	<canvas>
+		Get a real browser!
+		<!-- The user will only see the above text if their browser is older and doesn't support <canvas> -->
+	</canvas>
+	<section>
+		<button id="Void">Void</button> 
+		<button id="Sand">Sand</button> 
+		<button id="Water">Water</button>
+		<button id="Salt">Salt</button>
+		<button id="Smoke">Smoke</button>
+		<button id="Wall">Wall</button>
+		<button id="SaltWater">Salt Water</button>
+		<button id="Acid">Acid</button>
+		<button id="Oil">Oil</button>
+		<button id="Mercury">Mercury</button>
+		<button id="Fire">Fire To Be added</button>
+	</section>
+	<section>
+		<label>Gravity Speed: 
+			<input type="range" min="1" max="10" value="1" class="slider" id="gravitySpeed">
+		</label>
+		<label>Decrease Flow Chance: 
+			<input type="range" min="1" max="100" value="1" class="slider" id="flowChance">
+		</label>
+		<label>Flow Speed: 
+			<input type="range" min="1" max="100" value="1" class="slider" id="flowSpeed">
+        </label>
+    </section>
+    <section>
+        <label>Pen Size: 
+            <input type="range" min="0" max="4" value="2" class="slider" id="penSize">
+        </label>
+    </section>
+</body>
 </html>

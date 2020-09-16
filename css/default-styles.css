@@ -1,1 +1,8 @@
-
+canvas{
+    border:1px solid gray;
+}
+#fontLoader {
+    height: 0;
+    width: 0;
+    overflow: hidden;
+}
