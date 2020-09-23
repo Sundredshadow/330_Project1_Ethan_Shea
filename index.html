@@ -3,9 +3,10 @@
 <head>
 	<meta charset="utf-8" />
     <title>Template</title>
-    <link rel="stylesheet" type="text/css" href="styles/default-styles.css">
+    <link rel="stylesheet" type="text/css" href="css/default-styles.css">
     <script src="src/edsLIB.js"></script>
-    <script src="src/index.js"></script>
+	<script src="src/index.js"></script>
+	<script src="src/physicsWorker.js"></script>
 </head>
 <body>
 	<canvas>
@@ -23,7 +24,7 @@
 		<button id="Acid">Acid</button>
 		<button id="Oil">Oil</button>
 		<button id="Mercury">Mercury</button>
-		<button id="Fire">Fire To Be added</button>
+		<button id="Fire">Fire</button>
 	</section>
 	<section>
 		<label>Gravity Speed: 
@@ -40,6 +41,10 @@
         <label>Pen Size: 
             <input type="range" min="0" max="4" value="2" class="slider" id="penSize">
         </label>
-    </section>
+	</section>
+	<section>
+		<button id="Reset">Reset</button>
+		<button id="PausePlay">Pause/Play</button>
+	</section>
 </body>
 </html>
