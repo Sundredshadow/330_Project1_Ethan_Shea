@@ -1,5 +1,13 @@
 (function(){
 
+//fill random array before load so can use psuedo randomint
+let randoms= new Float32Array(1000).fill(0);
+for(let z=0;z<1000;z++)
+{  
+    randoms[z]=Math.random();
+}   
+
+
 window.onload = init;
 let width=640;//canvas height and width
 let height=480;
@@ -17,6 +25,8 @@ let risingSpeed=1;//amount gas is allowed to rise upward per frame
 let flowSpeed=1;//current flow speed of water
 let flowChance=1
 
+let basetime=Date.now();
+let fpsCap=1000/60;//denominator is fps
 
 //intialize
 function init(){
@@ -37,25 +47,35 @@ function init(){
     canvas.addEventListener('click',mouseClick,false);
     canvas.addEventListener('mouseleave',mouseClick,false);
     canvas.addEventListener('mousemove',mouseMove,false);
+
     cls(ctx);
     setupUI();
     update(ctx);
 }
 
+let play=true;
 //core drive functions aka update/draw
 function update(){
+    let now=Date.now();
+    let check=now-basetime;
+    if(check/fpsCap>=1){
+        basetime=now;
+        if(play){
+            cls(ctx); 
+            index.physics();
+            draw(ctx);
+        }
+    }
     requestAnimationFrame(update);
-    index.physics();
-    draw(ctx);
 }
 function draw(ctx){
     //let a=drawFewer(ctx);
+    let blocks=index.GetBlocks();
     for(let i=0;i<cols;i++)
     {
-        let blocks=index.GetBlocks();
         for(let z=0;z<rows;z++)
         {
-            switch(blocks[i][z]){
+            switch(blocks[i+z*cols]){
                 case 1:
                 drawRectangle(ctx,i*5,z*5,5,5,"yellow");//sand
                 break;
@@ -81,10 +101,17 @@ function draw(ctx){
                 drawRectangle(ctx,i*5,z*5,5,5,"#90ee90");//light green
                 break;
                 case 9:
-                drawRectangle(ctx,i*5,z*5,5,5,"#BBBBBB");
+                drawRectangle(ctx,i*5,z*5,5,5,"#BBBBBB");//mercury
                 break;
                 case 10:
-                drawRectangle(ctx,i*5,z*5,5,5,"red");
+                drawRectangle(ctx,i*5,z*5,5,5,"red");//fire
+                break;
+                case 11:
+                drawRectangle(ctx,i*5,z*5,5,5,"red");//fire
+                break;
+                case 12:
+                drawRectangle(ctx,i*5,z*5,5,5,"orange");//fire
+                break;
                 break;
                 default:
             }
@@ -93,13 +120,19 @@ function draw(ctx){
 }
 
 function cls(ctx){//clear screen
-    setTimeout(function(){cls(ctx);},1);
     ctx.clearRect(0,0,width,height);
     drawRectangle(ctx,0,0,width,height);
 }
 
+
+//psuedo random got a bunch of randoms before window loaded and iterates through
+//not used here but useful as a library tool
+let posRand=0;
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    if(posRand>=1000){posRand=0;}
+    let temp=Math.floor(randoms[posRand] * (max - min + 1)) + min;
+    posRand++;
+    return temp;
 }
 
 function drawRectangle(ctx,x,y,width,height,fillStyle="black",lineWidth=0,strokeStyle="black")
@@ -134,12 +167,12 @@ function addBlocks(e)
         for(let a=-1;a<penSize;a++)
         {
             if(centerX+(c*5)<640&&centerX+(c*5)>=0){
-                blocks[(centerX+(c*5))/5][((centerY+(a*5))/5)]=blockType;
+                blocks[((centerX+(c*5))/5)+(((centerY+(a*5))/5))*cols]=blockType;
             }
         }
     }
     //console.log(x+","+y);
-    timer=setTimeout(function(){addBlocks(e)},1);
+    timer=setTimeout(function(){addBlocks(e)},0);
 }
 function mouseMove(e){
     xClient=e.clientX;
@@ -210,7 +243,16 @@ function setupUI()
     }	
     document.querySelector("#penSize").oninput = function() {
         penSize = this.value;
-    }	
+    }
+    //other
+    document.querySelector("#Reset").onclick=function()
+    {
+        index.WipeBlocks();
+    };
+    document.querySelector("#PausePlay").onclick=function()
+    {
+        play=!play;
+    };
 }
 
 
@@ -239,5 +281,11 @@ function GetFlowChance()
 {
     return flowChance;
 }
-window.edsLIB={getRandomInt,GetGravity,GetSlide,GetFlowSpeed,GetFlowChance,GetRising};
+
+function GetRandomIntegerArr()
+{
+    return randoms;
+}
+
+window.edsLIB={GetRandomIntegerArr,GetGravity,GetSlide,GetFlowSpeed,GetFlowChance,GetRising};
 })()
